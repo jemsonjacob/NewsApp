@@ -20,3 +20,15 @@ class GetNewsUseCase implements Usecase<DataState<List<NewsEntity>>, void> {
     return await _newsRepository.getNewsArticles();
   }
 }
+
+class GetCategoryNewsUseCase
+    implements Usecase<DataState<List<NewsEntity>>, String> {
+  GetCategoryNewsUseCase(this._newsRepository);
+
+  final NewsRepository _newsRepository;
+
+  @override
+  Future<DataState<List<NewsEntity>>> call({required String params}) async {
+    return await _newsRepository.getNewsArticlesByCategory(params);
+  }
+}

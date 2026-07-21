@@ -11,3 +11,12 @@ abstract class NewsEvent extends Equatable {
 class GetNewsEvent extends NewsEvent {
   const GetNewsEvent();
 }
+
+class GetCategoryNewsEvent extends NewsEvent {
+  final String category;
+
+  const GetCategoryNewsEvent(this.category);
+
+  @override
+  List<Object> get props => [category];
+}

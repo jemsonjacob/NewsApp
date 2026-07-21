@@ -19,36 +19,75 @@ class DailyNewsScreen extends StatelessWidget {
             itemCount: state.news.length,
             itemBuilder: (context, index) {
               final news = state.news[index];
+              // Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //       builder: (_) =>
+              //           ArticleDetailsScreen(news: state.news[index]),
+              //     ),
+              //   );
 
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) =>
-                          ArticleDetailsScreen(news: state.news[index]),
-                    ),
-                  );
-                },
-                child: ListTile(
-                  leading: news.urlToImage != null
-                      ? Image.network(
-                          news.urlToImage!,
-                          width: 80,
-                          height: 150,
-                          fit: BoxFit.cover,
-                        )
-                      : const Icon(Icons.image),
-                  title: Text(
-                    news.title ?? "No Title",
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-
-                  subtitle: Text(
-                    news.description ?? "",
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
+              return Card(
+                margin: const EdgeInsets.all(10),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) =>
+                            ArticleDetailsScreen(news: state.news[index]),
+                      ),
+                    );
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ClipRRect(
+                        borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(12),
+                        ),
+                        child:
+                            (news.urlToImage != null &&
+                                news.urlToImage!.isNotEmpty)
+                            ? Image.network(
+                                news.urlToImage!,
+                                height: 200,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return const SizedBox(
+                                    height: 200,
+                                    child: Center(
+                                      child: Icon(Icons.broken_image),
+                                    ),
+                                  );
+                                },
+                              )
+                            : const SizedBox(
+                                height: 200,
+                                child: Center(child: Icon(Icons.image)),
+                              ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Text(
+                          news.title ?? '',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: Text(
+                          news.description ?? '',
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                    ],
                   ),
                 ),
               );

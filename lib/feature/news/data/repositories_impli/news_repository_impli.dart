@@ -20,4 +20,17 @@ class NewsRepositoryImpli implements NewsRepository {
       return DataFailed(e);
     }
   }
+
+  @override
+  Future<DataState<List<NewsEntity>>> getNewsArticlesByCategory(
+    String category,
+  ) async {
+    try {
+      final articles = await remoteDataSource.getNewsByCategory(category);
+
+      return DataSuccess(articles);
+    } on DioException catch (e) {
+      return DataFailed(e);
+    }
+  }
 }

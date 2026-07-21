@@ -4,7 +4,9 @@
 // ignore: avoid_types_as_parameter_names
 abstract class Usecase<Type, Params> {
   //generic types
-  Future<Type> call({Params params}); //Every use case has a call() method.
+  Future<Type> call({
+    required Params params,
+  }); //Every use case has a call() method.
 
   //It takes some Params.It returns a Future<Type>
 }

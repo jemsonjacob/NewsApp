@@ -33,11 +33,11 @@ class _MainScreenState extends State<MainScreen> {
         unselectedItemColor: Colors.grey,
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
+            icon: Icon(Icons.category_outlined),
+            label: 'Category',
           ),
+          BottomNavigationBarItem(icon: Icon(Icons.bookmark), label: 'Saved'),
         ],
       ),
     );
