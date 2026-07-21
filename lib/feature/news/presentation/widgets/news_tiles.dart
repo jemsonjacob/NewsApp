@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:news/feature/news/domain/entities/news_entities.dart';
 
 class NewsTile extends StatelessWidget {
@@ -32,6 +33,14 @@ class NewsTile extends StatelessWidget {
                           width: 110,
                           height: 90,
                           fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Container(
+                              width: 110,
+                              height: 90,
+                              color: Colors.grey.shade300,
+                              child: const Icon(Icons.broken_image),
+                            );
+                          },
                         )
                       : Container(
                           width: 110,
@@ -65,7 +74,11 @@ class NewsTile extends StatelessWidget {
                         ),
                         const Spacer(),
                         Text(
-                          article.publishedAt.toString(),
+                          DateFormat(
+                            'dd MMM yyyy',
+                          ).format(article.publishedAt!),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize: 12,
                             color: Colors.grey.shade600,

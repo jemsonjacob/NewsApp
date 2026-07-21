@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:news/feature/news/presentation/bloc/news_remote/news_bloc.dart';
-import 'package:news/feature/news/presentation/bloc/news_remote/news_event.dart';
+import 'package:news/feature/news/presentation/bloc/category_news/category_news_bloc.dart';
+import 'package:news/feature/news/presentation/bloc/top_news/top_news_bloc.dart';
 import 'package:news/feature/news/presentation/pages/home/main_screen.dart';
 import 'package:news/injection_container.dart';
 
@@ -16,9 +16,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<NewsBloc>(
-      create: (context) => sl()..add(const GetNewsEvent()),
-
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => sl<TopNewsBloc>()),
+        BlocProvider(create: (_) => sl<CategoryNewsBloc>()),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'News',

@@ -1,110 +1,121 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:news/feature/news/presentation/bloc/news_remote/news_bloc.dart';
-import 'package:news/feature/news/presentation/bloc/news_remote/news_event.dart';
+
+import 'package:news/feature/news/presentation/bloc/top_news/top_news_bloc.dart';
+import 'package:news/feature/news/presentation/bloc/top_news/top_news_event.dart';
+import 'package:news/feature/news/presentation/bloc/top_news/top_news_state.dart';
 import 'package:news/feature/news/presentation/pages/home/news_details_screen.dart';
 
-class DailyNewsScreen extends StatelessWidget {
+class DailyNewsScreen extends StatefulWidget {
   const DailyNewsScreen({super.key});
 
+  @override
+  State<DailyNewsScreen> createState() => _DailyNewsScreenState();
+}
+
+class _DailyNewsScreenState extends State<DailyNewsScreen> {
+  @override
+  void initState() {
+    context.read<TopNewsBloc>().add(const GetTopNewsEvent());
+    super.initState();
+  }
+
   Widget _buildBody() {
-    return BlocBuilder<NewsBloc, NewsState>(
+    return BlocBuilder<TopNewsBloc, TopNewsState>(
       builder: (context, state) {
-        if (state is NewsLoading) {
+        if (state is TopNewsLoading) {
           return const Center(child: CupertinoActivityIndicator());
         }
-        if (state is NewsLoaded) {
-          return ListView.builder(
-            itemCount: state.news.length,
-            itemBuilder: (context, index) {
-              final news = state.news[index];
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder: (_) =>
-              //           ArticleDetailsScreen(news: state.news[index]),
-              //     ),
-              //   );
+        if (state is TopNewsLoaded) {
+          return RefreshIndicator(
+            onRefresh: () async {
+              context.read<TopNewsBloc>().add(GetTopNewsEvent());
+            },
+            child: ListView.builder(
+              itemCount: state.news.length,
+              itemBuilder: (context, index) {
+                final news = state.news[index];
 
-              return Card(
-                margin: const EdgeInsets.all(10),
-                child: InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) =>
-                            ArticleDetailsScreen(news: state.news[index]),
-                      ),
-                    );
-                  },
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ClipRRect(
-                        borderRadius: const BorderRadius.vertical(
-                          top: Radius.circular(12),
+                return Card(
+                  margin: const EdgeInsets.all(10),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) =>
+                              ArticleDetailsScreen(news: state.news[index]),
                         ),
-                        child:
-                            (news.urlToImage != null &&
-                                news.urlToImage!.isNotEmpty)
-                            ? Image.network(
-                                news.urlToImage!,
-                                height: 200,
-                                width: double.infinity,
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return const SizedBox(
-                                    height: 200,
-                                    child: Center(
-                                      child: Icon(Icons.broken_image),
-                                    ),
-                                  );
-                                },
-                              )
-                            : const SizedBox(
-                                height: 200,
-                                child: Center(child: Icon(Icons.image)),
-                              ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(12),
-                        child: Text(
-                          news.title ?? '',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
+                      );
+                    },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ClipRRect(
+                          borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(12),
+                          ),
+                          child:
+                              (news.urlToImage != null &&
+                                  news.urlToImage!.isNotEmpty)
+                              ? Image.network(
+                                  news.urlToImage!,
+                                  height: 200,
+                                  width: double.infinity,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return const SizedBox(
+                                      height: 200,
+                                      child: Center(
+                                        child: Icon(Icons.broken_image),
+                                      ),
+                                    );
+                                  },
+                                )
+                              : const SizedBox(
+                                  height: 200,
+                                  child: Center(child: Icon(Icons.image)),
+                                ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Text(
+                            news.title ?? '',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: Text(
-                          news.description ?? '',
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          child: Text(
+                            news.description ?? '',
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 12),
-                    ],
+                        const SizedBox(height: 12),
+                      ],
+                    ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           );
         }
-        if (state is NewsError) {
+        if (state is TopNewsError) {
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Icon(Icons.error_outline),
                 const SizedBox(height: 12),
-                Text(state.message ?? "Something went wrong"),
+                Text(state.message),
                 ElevatedButton(
                   onPressed: () {
-                    context.read<NewsBloc>().add(const GetNewsEvent());
+                    context.read<TopNewsBloc>().add(const GetTopNewsEvent());
                   },
                   child: const Text("Retry"),
                 ),

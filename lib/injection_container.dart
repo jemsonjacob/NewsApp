@@ -5,7 +5,8 @@ import 'package:news/feature/news/data/data_sources/remote/news_remote_datasourc
 import 'package:news/feature/news/data/repositories_impli/news_repository_impli.dart';
 import 'package:news/feature/news/domain/repositories/news_repository.dart';
 import 'package:news/feature/news/domain/usecases/news_usecases.dart';
-import 'package:news/feature/news/presentation/bloc/news_remote/news_bloc.dart';
+import 'package:news/feature/news/presentation/bloc/category_news/category_news_bloc.dart';
+import 'package:news/feature/news/presentation/bloc/top_news/top_news_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -28,7 +29,7 @@ Future<void> initializeDependencies() async {
   sl.registerSingleton<GetNewsUseCase>(GetNewsUseCase(sl()));
   sl.registerSingleton<GetCategoryNewsUseCase>(GetCategoryNewsUseCase(sl()));
   //register bloc
-  sl.registerFactory<NewsBloc>(
-    () => NewsBloc(sl<GetNewsUseCase>(), sl<GetCategoryNewsUseCase>()),
-  );
+  sl.registerFactory<TopNewsBloc>(() => TopNewsBloc(sl()));
+
+  sl.registerFactory<CategoryNewsBloc>(() => CategoryNewsBloc(sl()));
 }

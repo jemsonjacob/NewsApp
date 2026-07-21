@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:news/feature/news/presentation/bloc/news_remote/news_bloc.dart';
-import 'package:news/feature/news/presentation/bloc/news_remote/news_event.dart';
+import 'package:news/feature/news/presentation/bloc/category_news/category_news_bloc.dart';
+import 'package:news/feature/news/presentation/bloc/category_news/category_news_event.dart';
+import 'package:news/feature/news/presentation/bloc/category_news/category_news_state.dart';
 import 'package:news/feature/news/presentation/pages/home/news_details_screen.dart';
 import 'package:news/feature/news/presentation/widgets/news_tiles.dart';
 
@@ -29,7 +30,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   void initState() {
     super.initState();
 
-    context.read<NewsBloc>().add(GetCategoryNewsEvent(selectedCategory));
+    context.read<CategoryNewsBloc>().add(
+      GetCategoryNewsEvent(selectedCategory),
+    );
   }
 
   @override
@@ -59,7 +62,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                         selectedCategory = category;
                       });
 
-                      context.read<NewsBloc>().add(
+                      context.read<CategoryNewsBloc>().add(
                         GetCategoryNewsEvent(category),
                       );
                     },
@@ -72,17 +75,17 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
           const SizedBox(height: 10),
 
           Expanded(
-            child: BlocBuilder<NewsBloc, NewsState>(
+            child: BlocBuilder<CategoryNewsBloc, CategoryNewsState>(
               builder: (context, state) {
-                if (state is NewsLoading) {
+                if (state is CategoryNewsLoading) {
                   return const Center(child: CupertinoActivityIndicator());
                 }
 
-                if (state is NewsError) {
-                  return Center(child: Text(state.message!));
+                if (state is CategoryNewsError) {
+                  return Center(child: Text(state.message));
                 }
 
-                if (state is NewsLoaded) {
+                if (state is CategoryNewsLoaded) {
                   return ListView.builder(
                     itemCount: state.news.length,
                     itemBuilder: (context, index) {

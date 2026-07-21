@@ -26,7 +26,7 @@ class NewsRemoteDataSourceImpl implements NewsRemoteDataSource {
     try {
       final response = await dio.get(
         '/top-headlines',
-        queryParameters: {'country': 'in', 'apiKey': newsAPIKey},
+        queryParameters: {'country': 'us', 'apiKey': newsAPIKey},
       );
 
       final articles = response.data['articles'] as List;
