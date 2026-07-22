@@ -35,6 +35,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   dio: ^5.9.2
+  hive:
   hive_flutter: ^1.1.0
   intl: ^0.20.3
   flutter_bloc: ^9.1.1
@@ -43,10 +44,8 @@ dependencies:
   #simple service locator 
   get_it: ^9.2.1
   cached_network_image: ^3.4.1
-  retrofit:
   logger: ^2.6.0  # for logging purpose
   json_annotation: ^4.9.0
-  dartz: ^0.10.1
   internet_connection_checker_plus:
   url_launcher:
 
@@ -65,7 +64,6 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   hive_generator:
   build_runner: 
-  retrofit_generator: 
   json_serializable: 
   
 
